@@ -1,7 +1,7 @@
 RobotFindsKitten for Arduino
 ===
 
-This is an attempt to port RobotFindsKitten to Arduino
+Helping robots find kittens, now on Arduino!
 
 ## How to play
 
@@ -14,9 +14,9 @@ On Linux run `screen /dev/ttyACM0 9600` (replace ttyACM0 with port connected to 
 
 ## Credits
 
-Ported from RobotFindsKitten for AVR by Daniel Beer.   
+Based on robotfindskitten AVR port by Daniel Beer.   
 http://robotfindskitten.org/download/AmtelAVR/  
 
-Original RobotFindsKitten by Leonard Richardson.   
+Original robotfindskitten by Leonard Richardson.   
 http://robotfindskitten.org/
  
