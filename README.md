@@ -10,6 +10,8 @@ On Windows use <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/" targ
 On Linux run `screen /dev/ttyACM0 9600` (Arduino may be connected to differrent port than ttyACM0).
 
 
+![Screenshot on PuTTY](screenshot.jpg)
+
 ## Credits
 
 Ported from RobotFindsKitten for AVR by Daniel Beer.   
