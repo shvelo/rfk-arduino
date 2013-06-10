@@ -5,9 +5,7 @@
  *   AVR Port by Daniel Beer 2003 (C) 2003, dbb28@cornell.edu
 */
 
-
-#define XTAL_CPU         16000000      // Chip speed
-#define UART_BAUD_RATE     19200      // Desired BAUD rate
+#define BAUD_RATE 9600     // Desired BAUD rate
 
 #define EMPTY 0
 #define ROBOT 1
@@ -16,25 +14,17 @@
 #define NUM_BOGUS 10
 
 
-   // PROTOTYPES
-
-
 void instructions(void);
 void draw_robot(void);
 void draw_kitten(void);
 uint8_t PlayGame(void);
 uint8_t random8(void);
 char* inttostr(uint8_t input);
-void SetupSystem(void);
 void SetupNewGame(void);
 void clrscr(void);
 void textcolor(uint8_t color);
 uint8_t getspaceat(uint8_t x, uint8_t y, uint8_t numtocheck);
 void gotoxy(uint8_t x, uint8_t y);
-
-
-   // GLOBALS
-
 
 char output[4];
 uint8_t counter;
@@ -46,10 +36,6 @@ uint8_t bogus_messages[NUM_BOGUS];
 unsigned char boguschar[NUM_BOGUS];
 unsigned char kittenchar;
 uint8_t seed = 1;
-
-
-	// CONSTANTS
-
 
 const char message1[] PROGMEM = "\"I pity the fool who mistakes me for kitten!\", sez Mr. T.";
 const char message2[] PROGMEM = "That's just an old tin can.";
@@ -243,49 +229,39 @@ void _delay_loop_2(int t) {
 }
 
 char uart_getc() {
+  while(Serial.available() == 0);
   char c = Serial.read();
   return c;
 }
 
-int main(void)
+void setup()
 {
-	SetupSystem();
-	
-	//Print instructions.
-	clrscr();
-	
-	instructions();
+  Serial.begin(BAUD_RATE);
+  
+  // Get random seed
+  clrscr();
+  textcolor(7);
+  uart_puts_P("Please enter 2 characters for random seed generation: ");
 
-	while (1)
-	{
-		clrscr();
-		SetupNewGame();
-		uint8_t score = PlayGame();
-		
-		while (~(uart_getc() & Serial.available() == 0)) uart_getc();
-		
-		gotoxy(27,12);
-		uart_puts_P("Press any key to continue");
-		while (Serial.available() == 0);
-	}
+  for (uint8_t a = 0; a < 2; a++)
+  {
+    unsigned char input = 0;
+    while ( !input ) input = uart_getc();
+    seed = seed + input;
+  }
+  
+  clrscr();
+	
+  instructions();
 }
 
-void SetupSystem(void)
-{		
-	// init the UART to the proper BAUD
-	Serial.begin(UART_BAUD_RATE);
-
-	// Get random seed
-	clrscr();
-	textcolor(7);
-	uart_puts_P("Please enter 2 characters for random seed generation: ");
-	
-	for (uint8_t a = 0; a < 2; a++)
-	{
-		unsigned char input = 0;
-		while ( !input ) input = uart_getc();
-		seed = seed + input;
-	}
+void loop() {
+  clrscr();
+  SetupNewGame();
+  uint8_t score = PlayGame();
+  gotoxy(27,12);
+  uart_puts_P("Press any key to continue");
+  while (Serial.available() == 0);
 }
 
 void SetupNewGame(void)
@@ -362,8 +338,6 @@ uint8_t PlayGame(void)
 	textcolor(7);
 	gotoxy(1,1);
 	uart_puts_P("robotfindskitten v1600000.666 (AVR)");
-	gotoxy(1,3);
-	uart_puts_P("��������������������������������������������������������������������������������");
 	gotoxy(kittenx,kitteny);
 	draw_kitten();
 	
