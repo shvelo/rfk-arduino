@@ -1,8 +1,9 @@
-/*robotfindskitten v1600000.666 (AVR) source code.
+/* robotfindskitten v1600000.666 (Arduino) source code.
  *
- *Copyright (C) 1997,1999 Leonard Richardson leonardr@segfault.org
+ * Copyright (C) 1997,1999 Leonard Richardson leonardr@segfault.org
  *
- *   AVR Port by Daniel Beer 2003 (C) 2003, dbb28@cornell.edu
+ * Arduino Port by Nick Shvelidze 2013, shveloo@gmail.com
+ * AVR Port by Daniel Beer 2003 (C) 2003, dbb28@cornell.edu
 */
 
 #define BAUD_RATE 9600     // Desired BAUD rate
