@@ -490,7 +490,9 @@ void instructions()
 void draw_robot() //Draws robot at current position
 {
 	textcolor(7);
+	bgcolor(1);
 	uart_putc('#');
+	bgcolor(7);
 }
 
 void draw_kitten() //Draws kitten at current position
@@ -558,6 +560,13 @@ void textcolor(uint8_t color)
 	uart_puts_P("\e[3");
 	uart_putc(color + 48);
 	uart_putc('m');
+}
+
+void bgcolor(uint8_t color)
+{
+	uart_puts_P("\e[3");
+	uart_putc(color + 48);
+	uart_putc('dm');
 }
 
 uint8_t getspaceat(uint8_t x, uint8_t y, uint8_t numtocheck)
