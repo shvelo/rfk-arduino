@@ -227,7 +227,7 @@ void uart_putc(char ch) {
 }
 
 void _delay_loop_2(int t) {
-  delay(t / 100);
+  delay(t / 400);
 }
 
 char uart_getc() {
