@@ -241,14 +241,9 @@ void setup()
   Serial.begin(BAUD_RATE);
   
   // Get random seed
-  clrscr();
-  textcolor(7);
-  uart_puts_P("Please enter 2 characters for random seed generation: ");
-
   for (uint8_t a = 0; a < 2; a++)
   {
-    unsigned char input = 0;
-    while ( !input ) input = uart_getc();
+    unsigned char input = analogRead(A0);
     seed = seed + input;
   }
   
@@ -492,7 +487,7 @@ void draw_robot() //Draws robot at current position
 	textcolor(7);
 	bgcolor(1);
 	uart_putc('#');
-	bgcolor(7);
+	bgcolor(0);
 }
 
 void draw_kitten() //Draws kitten at current position
@@ -564,9 +559,9 @@ void textcolor(uint8_t color)
 
 void bgcolor(uint8_t color)
 {
-	uart_puts_P("\e[3");
+	uart_puts_P("\e[4");
 	uart_putc(color + 48);
-	uart_puts_P("dm");
+	uart_putc('m');
 }
 
 uint8_t getspaceat(uint8_t x, uint8_t y, uint8_t numtocheck)
