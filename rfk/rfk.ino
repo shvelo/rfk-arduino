@@ -7,7 +7,13 @@
  * AVR Port by Daniel Beer 2003 (C) 2003, dbb28@cornell.edu
 */
 
-#define BAUD_RATE 9600     // Desired BAUD rate
+#define BAUD_RATE 19200 //desired baud rate
+
+// Controls:
+#define PIN_UP 2 // up - digital pin 2
+#define PIN_DOWN 3 // down - digital pin 3
+#define PIN_LEFT 4 // left - digital pin 4
+#define PIN_RIGHT 5 // right - digital pin 5
 
 #define EMPTY 0
 #define ROBOT 1
@@ -208,6 +214,30 @@ const char* messages[] = {
   message141, message142, message143, message144, message145, message146, message147, message148, message149, message150
 };
 
+char readButtons() {
+  if(digitalRead(PIN_UP) == HIGH)
+  return 'w';
+  else if(digitalRead(PIN_DOWN) == HIGH)
+  return 's';
+  else if(digitalRead(PIN_LEFT) == HIGH)
+  return 'a';
+  else if(digitalRead(PIN_RIGHT) == HIGH)
+  return 'd';
+  else
+  return 0;
+}
+
+char get_input() {
+  char b;
+  
+  while(Serial.available() == 0 && (b = readButtons()) == 0);
+  
+  if(Serial.available() > 0)
+    return Serial.read();
+  else
+    return b;
+}
+
 void uart_puts_P(char str[]) {
   Serial.write(str);
 }
@@ -353,13 +383,13 @@ uint8_t PlayGame(void)
 	//
 	//Now the fun begins.
 	//
-	unsigned char input = uart_getc();
+	unsigned char input = get_input();
 	
 	uint8_t gameover = 0;
 	
 	while (!gameover) 
 	{	
-		input = uart_getc();
+		input = get_input();
 	
 		uint8_t check_x = robotx;
 		uint8_t check_y = roboty;
