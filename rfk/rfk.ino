@@ -566,7 +566,7 @@ void bgcolor(uint8_t color)
 {
 	uart_puts_P("\e[3");
 	uart_putc(color + 48);
-	uart_putc('dm');
+	uart_puts_P("dm");
 }
 
 uint8_t getspaceat(uint8_t x, uint8_t y, uint8_t numtocheck)
