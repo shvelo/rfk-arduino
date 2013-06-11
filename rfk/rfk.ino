@@ -215,16 +215,11 @@ const char* messages[] = {
 };
 
 char readButtons() {
-  if(digitalRead(PIN_UP) == HIGH)
-  return 'w';
-  else if(digitalRead(PIN_DOWN) == HIGH)
-  return 's';
-  else if(digitalRead(PIN_LEFT) == HIGH)
-  return 'a';
-  else if(digitalRead(PIN_RIGHT) == HIGH)
-  return 'd';
-  else
-  return 0;
+  if(digitalRead(PIN_UP) == HIGH) return 'w';
+  else if(digitalRead(PIN_DOWN) == HIGH) return 's';
+  else if(digitalRead(PIN_LEFT) == HIGH) return 'a';
+  else if(digitalRead(PIN_RIGHT) == HIGH) return 'd';
+  else return 0;
 }
 
 char get_input() {
@@ -232,10 +227,9 @@ char get_input() {
   
   while(Serial.available() == 0 && (b = readButtons()) == 0);
   
-  if(Serial.available() > 0)
-    return Serial.read();
-  else
-    return b;
+  if(Serial.available() > 0) b = Serial.read();
+  
+  return b;
 }
 
 void uart_puts_P(char str[]) {
@@ -268,6 +262,15 @@ char uart_getc() {
 
 void setup()
 {
+  pinMode(PIN_UP, INPUT);
+  pinMode(PIN_DOWN, INPUT);
+  pinMode(PIN_LEFT, INPUT);
+  pinMode(PIN_RIGHT, INPUT);
+  digitalWrite(PIN_UP, HIGH);
+  digitalWrite(PIN_LEFT, HIGH);
+  digitalWrite(PIN_RIGHT, HIGH);
+  digitalWrite(PIN_DOWN, HIGH);
+  
   Serial.begin(BAUD_RATE);
   
   // Get random seed
@@ -288,7 +291,7 @@ void loop() {
   uint8_t score = PlayGame();
   gotoxy(27,12);
   uart_puts_P("Press any key to continue");
-  while (Serial.available() == 0);
+  get_input();
 }
 
 void SetupNewGame(void)
@@ -384,11 +387,11 @@ uint8_t PlayGame(void)
 	//Now the fun begins.
 	//
 	unsigned char input = get_input();
-	
+        
 	uint8_t gameover = 0;
 	
-	while (!gameover) 
-	{	
+	while (!gameover) {
+                
 		input = get_input();
 	
 		uint8_t check_x = robotx;
@@ -508,8 +511,7 @@ void instructions()
 	uart_puts_P ("ends when robotfindskitten. See the documentation for more information.\n\r\n\r");
 	uart_puts_P ("\n\r\n\r");
 	uart_puts_P ("   Press any key to start.\n\r");
-	while (Serial.available() == 0);
-
+	get_input();
 }
 
 void draw_robot() //Draws robot at current position
