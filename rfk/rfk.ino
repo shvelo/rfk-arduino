@@ -7,6 +7,21 @@
  * AVR Port by Daniel Beer 2003 (C) 2003, dbb28@cornell.edu
 */
 
+#include <Keypad.h>
+
+const byte ROWS = 4; //four rows
+const byte COLS = 4; //three columns
+char keys[ROWS][COLS] = {
+  {'1','2','3', 'A'},
+  {'4','5','6', 'B'},
+  {'7','8','9', 'C'},
+  {'*','0','#', 'D'}
+};
+byte rowPins[ROWS] = {34, 36, 38, 40}; //connect to the row pinouts of the keypad
+byte colPins[COLS] = {42, 44, 46, 48}; //connect to the column pinouts of the keypad
+
+Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
+
 #define BAUD_RATE 19200 //desired baud rate
 
 // Controls:
@@ -215,10 +230,13 @@ const char* messages[] = {
 };
 
 char readButtons() {
-  if(digitalRead(PIN_UP) == HIGH) return 'w';
-  else if(digitalRead(PIN_DOWN) == HIGH) return 's';
-  else if(digitalRead(PIN_LEFT) == HIGH) return 'a';
-  else if(digitalRead(PIN_RIGHT) == HIGH) return 'd';
+  char key = keypad.getKey();
+  if(key != NO_KEY) {
+    if(key == '2') return 'w';
+    if(key == '8') return 's';
+    if(key == '4') return 'a';
+    if(key == '6') return 'd';
+  }
   else return 0;
 }
 
